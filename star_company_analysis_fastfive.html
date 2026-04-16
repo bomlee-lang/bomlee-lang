@@ -1,0 +1,414 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans, sans-serif); color: var(--color-text-primary); }
+.wrap { padding: 0 0 2rem; }
+.section { margin-bottom: 2rem; }
+.section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+.tab { padding: 6px 14px; font-size: 13px; font-weight: 500; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all .15s; }
+.tab.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; font-weight: 500; font-size: 12px; color: var(--color-text-secondary); padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); white-space: nowrap; }
+td { padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; line-height: 1.5; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--color-background-secondary); }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.badge-cbd { background: var(--color-background-info); color: var(--color-text-info); }
+.badge-gbd { background: var(--color-background-success); color: var(--color-text-success); }
+.badge-etc { background: var(--color-background-warning); color: var(--color-text-warning); }
+.badge-it { background: #EEEDFE; color: #3C3489; }
+.badge-fin { background: #E1F5EE; color: #085041; }
+.badge-mfg { background: #FAEEDA; color: #633806; }
+.badge-con { background: #FAECE7; color: #4A1B0C; }
+.badge-bio { background: #FBEAF0; color: #4B1528; }
+.badge-ent { background: #E6F1FB; color: #042C53; }
+.badge-d2c { background: #EAF3DE; color: #173404; }
+.badge-star { background: var(--color-background-danger); color: var(--color-text-danger); }
+
+.card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; }
+.card-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+.card-sub { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; }
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+
+.stat-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 14px; }
+.stat-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.stat-val { font-size: 20px; font-weight: 500; }
+
+.hook-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; }
+.hook-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.hook-badge { font-size: 12px; font-weight: 500; padding: 3px 10px; border-radius: 10px; }
+.hook-company { font-size: 12px; color: var(--color-text-secondary); }
+.hook-item { display: flex; gap: 8px; margin-bottom: 8px; font-size: 13px; line-height: 1.55; }
+.hook-num { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); min-width: 18px; padding-top: 1px; }
+
+.insight-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; font-size: 13px; line-height: 1.55; }
+.insight-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-primary); margin-top: 5px; flex-shrink: 0; }
+</style>
+
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('분류')">① 기업 분류</button>
+    <button class="tab" onclick="showTab('정보')">② 기업 정보</button>
+    <button class="tab" onclick="showTab('구역')">③ 구역·업종 분석</button>
+    <button class="tab" onclick="showTab('그룹')">④ 업종 그룹</button>
+    <button class="tab" onclick="showTab('훅')">⑤ 아이스브레이킹</button>
+    <button class="tab" onclick="showTab('인사이트')">⑥ 인사이트</button>
+  </div>
+
+  <!-- TAB 1: 분류 -->
+  <div id="tab-분류" class="tab-content active">
+    <div class="section">
+      <div class="section-title">스타기업 44개 — 구역 × 업종 분류표</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;font-size:12px;">
+        <span>구역: </span>
+        <span class="badge badge-cbd">CBD 도심</span>
+        <span class="badge badge-gbd">GBD 강남</span>
+        <span class="badge badge-etc">기타</span>
+        &nbsp;|&nbsp;
+        <span class="badge badge-it">IT·AI·SaaS</span>
+        <span class="badge badge-fin">금융·핀테크</span>
+        <span class="badge badge-mfg">제조·무역</span>
+        <span class="badge badge-con">컨설팅·HR</span>
+        <span class="badge badge-bio">바이오·헬스</span>
+        <span class="badge badge-ent">콘텐츠·엔터</span>
+        <span class="badge badge-d2c">D2C·물류</span>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>회사명</th><th>구역</th><th>업종</th><th>지점</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>팔란티어테크놀로지스코리아</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>광화문1</td></tr>
+          <tr><td>2</td><td>LX인터내셔널</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-mfg">제조·무역</span></td><td>광화문1</td></tr>
+          <tr><td>3</td><td>바카디코리아</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-mfg">제조·무역</span></td><td>시청1</td></tr>
+          <tr><td>4</td><td>PwC컨설팅</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-con">컨설팅·HR</span></td><td>시청1</td></tr>
+          <tr><td>5</td><td>발렌라이프</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-d2c">D2C</span></td><td>시청1</td></tr>
+          <tr><td>6</td><td>에이아이에이프리미어파트너스</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>시청2</td></tr>
+          <tr><td>7</td><td>클룩트래블테크놀러지</td><td><span class="badge badge-cbd">CBD</span></td><td><span class="badge badge-ent">콘텐츠·엔터</span></td><td>을지로2</td></tr>
+          <tr><td>8</td><td>씨제이올리브네트웍스</td><td><span class="badge badge-etc">기타(서울역)</span></td><td><span class="badge badge-it">IT·AI</span></td><td>서울역1</td></tr>
+          <tr><td>9</td><td>스캐터랩</td><td><span class="badge badge-etc">기타(성수)</span></td><td><span class="badge badge-it">IT·AI</span></td><td>서울숲1</td></tr>
+          <tr><td>10</td><td>덱스터크레마</td><td><span class="badge badge-etc">기타(성수)</span></td><td><span class="badge badge-ent">콘텐츠·엔터</span></td><td>서울숲1</td></tr>
+          <tr><td>11</td><td>현대오토에버</td><td><span class="badge badge-etc">기타(성수)</span></td><td><span class="badge badge-it">IT·AI</span></td><td>서울숲1</td></tr>
+          <tr><td>12</td><td>에어캡(AIRCAP)</td><td><span class="badge badge-etc">기타(홍대)</span></td><td><span class="badge badge-d2c">D2C·물류</span></td><td>합정1</td></tr>
+          <tr><td>13</td><td>인플루디오</td><td><span class="badge badge-etc">기타(여의도)</span></td><td><span class="badge badge-ent">콘텐츠·엔터</span></td><td>영등포1</td></tr>
+          <tr><td>14</td><td>삼정회계법인</td><td><span class="badge badge-etc">기타(여의도)</span></td><td><span class="badge badge-con">컨설팅·HR</span></td><td>여의도1</td></tr>
+          <tr><td>15</td><td>LG전자</td><td><span class="badge badge-etc">기타(마곡)</span></td><td><span class="badge badge-mfg">제조·무역</span></td><td>마곡나루1</td></tr>
+          <tr><td>16</td><td>비바리퍼블리카(토스)</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>강남4</td></tr>
+          <tr><td>17</td><td>매드업</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>강남4</td></tr>
+          <tr><td>18</td><td>에스디생명공학</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-bio">바이오·헬스</span></td><td>강남4</td></tr>
+          <tr><td>19</td><td>클라썸</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>강남5</td></tr>
+          <tr><td>20</td><td>필라이즈</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-bio">바이오·헬스</span></td><td>강남5</td></tr>
+          <tr><td>21</td><td>삼성물산</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-mfg">제조·무역</span></td><td>강남2</td></tr>
+          <tr><td>22</td><td>아데코코리아</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-con">컨설팅·HR</span></td><td>삼성2</td></tr>
+          <tr><td>23</td><td>우리금융지주</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>삼성2</td></tr>
+          <tr><td>24</td><td>에스케이쉴더스</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>삼성3</td></tr>
+          <tr><td>25</td><td>BCG</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-con">컨설팅·HR</span></td><td>삼성3</td></tr>
+          <tr><td>26</td><td>클레온</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>삼성3</td></tr>
+          <tr><td>27</td><td>칼스버그코리아</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-mfg">제조·무역</span></td><td>삼성4</td></tr>
+          <tr><td>28</td><td>캡스톤자산운용</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>삼성1</td></tr>
+          <tr><td>29</td><td>와이어바알리</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>선릉센트럴</td></tr>
+          <tr><td>30</td><td>셀렉트스타</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>선릉2</td></tr>
+          <tr><td>31</td><td>팔로알토네트웍스코리아</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>강남3</td></tr>
+          <tr><td>32</td><td>워트인텔리전스</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>신논현1</td></tr>
+          <tr><td>33</td><td>봉봉</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-ent">콘텐츠·엔터</span></td><td>신논현2</td></tr>
+          <tr><td>34</td><td>하나금융티아이</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>하나금융융합기술원</td></tr>
+          <tr><td>35</td><td>뉴냅스</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-bio">바이오·헬스</span></td><td>학동2</td></tr>
+          <tr><td>36</td><td>아이톡시</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-bio">바이오·헬스</span></td><td>학동1</td></tr>
+          <tr><td>37</td><td>원프레딕트</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-it">IT·AI</span></td><td>학동1</td></tr>
+          <tr><td>38</td><td>글리티</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-d2c">D2C·물류</span></td><td>학동1</td></tr>
+          <tr><td>39</td><td>파스토</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-d2c">D2C·물류</span></td><td>강남구청1</td></tr>
+          <tr><td>40</td><td>토스인슈어런스</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>교대1</td></tr>
+          <tr><td>41</td><td>레버리지히어로</td><td><span class="badge badge-gbd">GBD</span></td><td><span class="badge badge-fin">금융·핀테크</span></td><td>서초썸머버드</td></tr>
+          <tr><td>42</td><td>에이유브랜즈</td><td><span class="badge badge-etc">기타(성수)</span></td><td><span class="badge badge-d2c">D2C·물류</span></td><td>성수1</td></tr>
+          <tr><td>43</td><td>소니뮤직엔터테인먼트코리아</td><td><span class="badge badge-etc">기타(용산)</span></td><td><span class="badge badge-ent">콘텐츠·엔터</span></td><td>용산1</td></tr>
+          <tr><td>44</td><td>차봇모빌리티</td><td><span class="badge badge-etc">기타(성수)</span></td><td><span class="badge badge-d2c">D2C·물류</span></td><td>서울숲1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: 기업 정보 -->
+  <div id="tab-정보" class="tab-content">
+    <div class="section">
+      <div class="section-title">기업별 데스크 수 · 규모 · 주요 사업</div>
+      <table>
+        <thead><tr><th>회사명</th><th style="text-align:right">데스크</th><th>규모</th><th>주요 사업 (한 줄)</th></tr></thead>
+        <tbody>
+          <tr><td>아데코코리아</td><td style="text-align:right;font-weight:500">218</td><td>대기업(MNC)</td><td>글로벌 HR 1위 그룹 한국 법인, 인력파견·채용</td></tr>
+          <tr><td>스캐터랩</td><td style="text-align:right;font-weight:500">171</td><td>스타트업(Series A+)</td><td>AI 소셜 챗봇 '이루다·제타', DAU 30만</td></tr>
+          <tr><td>씨제이올리브네트웍스</td><td style="text-align:right;font-weight:500">162</td><td>대기업 계열</td><td>CJ그룹 IT서비스·디지털 전환 핵심 인프라</td></tr>
+          <tr><td>봉봉</td><td style="text-align:right;font-weight:500">152</td><td>중견·성장</td><td>모바일 게임 개발·퍼블리싱</td></tr>
+          <tr><td>하나금융티아이</td><td style="text-align:right;font-weight:500">150</td><td>대기업 계열</td><td>하나금융그룹 IT, AI뱅킹·디지털 전환 인프라</td></tr>
+          <tr><td>워트인텔리전스</td><td style="text-align:right;font-weight:500">148</td><td>스타트업(Series A)</td><td>생성형AI 기반 IP·특허 SaaS, 해외 수출</td></tr>
+          <tr><td>덱스터크레마</td><td style="text-align:right;font-weight:500">145</td><td>중견(코스닥 계열)</td><td>VFX·AI 디지털 마케팅, 오징어게임S2 참여</td></tr>
+          <tr><td>에스케이쉴더스</td><td style="text-align:right;font-weight:500">139</td><td>대기업 계열</td><td>SK그룹 보안 계열, AI 기반 보안관제 1위</td></tr>
+          <tr><td>팔란티어코리아</td><td style="text-align:right;font-weight:500">133</td><td>대기업(MNC·나스닥)</td><td>AI·데이터 분석 플랫폼, 방산·에너지·금융</td></tr>
+          <tr><td>비바리퍼블리카(토스)</td><td style="text-align:right;font-weight:500">125</td><td>유니콘(IPO 준비)</td><td>핀테크 슈퍼앱, 연매출 2.7조, 국내 핀테크 1위</td></tr>
+          <tr><td>현대오토에버</td><td style="text-align:right;font-weight:500">116</td><td>대기업 계열</td><td>현대차그룹 IT, 전장·자율주행 디지털 전환</td></tr>
+          <tr><td>바카디코리아</td><td style="text-align:right;font-weight:500">113</td><td>대기업(MNC)</td><td>글로벌 주류 3위 Bacardi 한국 법인</td></tr>
+          <tr><td>발렌라이프</td><td style="text-align:right;font-weight:500">112</td><td>스타트업(고성장)</td><td>K-뷰티 브랜드 빌딩, 분기 40% 성장, 연매출 100억+</td></tr>
+          <tr><td>인플루디오</td><td style="text-align:right;font-weight:500">106</td><td>중견·성장</td><td>인플루언서 마케팅 플랫폼, K-콘텐츠 글로벌</td></tr>
+          <tr><td>파이온코퍼레이션</td><td style="text-align:right;font-weight:500">106</td><td>스타트업</td><td>HR·조직 SaaS 솔루션</td></tr>
+          <tr><td>클룩트래블</td><td style="text-align:right;font-weight:500">104</td><td>대기업(싱가포르 상장)</td><td>아시아 최대 여행 액티비티 OTA</td></tr>
+          <tr><td>클라썸</td><td style="text-align:right;font-weight:500">102</td><td>스타트업(Series B)</td><td>에듀테크 AI SaaS, 32개국 11,000개 기관</td></tr>
+          <tr><td>LG전자</td><td style="text-align:right;font-weight:500">100</td><td>대기업</td><td>가전·전장·B2B, 연매출 87조</td></tr>
+          <tr><td>에스디생명공학</td><td style="text-align:right;font-weight:500">94</td><td>중견</td><td>바이오·화장품 원료, K-뷰티 글로벌 수요</td></tr>
+          <tr><td>파스토</td><td style="text-align:right;font-weight:500">90</td><td>스타트업(Series B+)</td><td>이커머스 풀필먼트 SaaS 선두</td></tr>
+          <tr><td>글리티</td><td style="text-align:right;font-weight:500">87</td><td>스타트업·성장</td><td>D2C 패션 플랫폼, K-패션 글로벌</td></tr>
+          <tr><td>에이유브랜즈</td><td style="text-align:right;font-weight:500">69</td><td>스타트업</td><td>성수 기반 D2C 소비재 브랜드</td></tr>
+          <tr><td>원프레딕트</td><td style="text-align:right;font-weight:500">66</td><td>스타트업</td><td>설비 예지보전 AI 솔루션, 제조대기업 수요</td></tr>
+          <tr><td>에이아이에이프리미어파트너스</td><td style="text-align:right;font-weight:500">57</td><td>스타트업·VC</td><td>AI 특화 벤처캐피탈·PE</td></tr>
+          <tr><td>매드업</td><td style="text-align:right;font-weight:500">56</td><td>스타트업(Series C)</td><td>퍼포먼스 마케팅 1위 플랫폼, 연매출 350억</td></tr>
+          <tr><td>칼스버그코리아</td><td style="text-align:right;font-weight:500">55</td><td>대기업(MNC)</td><td>Carlsberg 그룹 한국 법인, 프리미엄 주류</td></tr>
+          <tr><td>소니뮤직코리아</td><td style="text-align:right;font-weight:500">54</td><td>대기업(MNC)</td><td>Sony Music 한국, 글로벌 음악 메이저 K-POP 유통</td></tr>
+          <tr><td>레버리지히어로</td><td style="text-align:right;font-weight:500">54</td><td>스타트업</td><td>기업 금융 자동화 핀테크 SaaS</td></tr>
+          <tr><td>차봇모빌리티</td><td style="text-align:right;font-weight:500">51</td><td>스타트업(Series B)</td><td>자동차 데이터 플랫폼, EV 전환 수혜</td></tr>
+          <tr><td>에어캡(AIRCAP)</td><td style="text-align:right;font-weight:500">50</td><td>스타트업(Series A+)</td><td>항공화물 물류 디지털화 SaaS</td></tr>
+          <tr><td>아이톡시</td><td style="text-align:right;font-weight:500">52</td><td>스타트업</td><td>피부과학 기반 바이오 스타트업</td></tr>
+          <tr><td>클레온</td><td style="text-align:right;font-weight:500">45</td><td>스타트업</td><td>AI 가상인간·디지털 트윈 SaaS</td></tr>
+          <tr><td>셀렉트스타</td><td style="text-align:right;font-weight:500">42</td><td>스타트업(Series B)</td><td>AI 학습 데이터 레이블링 플랫폼</td></tr>
+          <tr><td>필라이즈</td><td style="text-align:right;font-weight:500">40</td><td>스타트업</td><td>영양제·건강기능식품 복약 관리 헬스케어 SaaS</td></tr>
+          <tr><td>팔로알토네트웍스코리아</td><td style="text-align:right;font-weight:500">39</td><td>대기업(MNC·나스닥)</td><td>글로벌 사이버보안 1위, FY24 매출 $8B+</td></tr>
+          <tr><td>BCG</td><td style="text-align:right;font-weight:500">25</td><td>대기업(글로벌 컨설팅)</td><td>글로벌 전략컨설팅 빅3 한국 법인</td></tr>
+          <tr><td>삼성물산</td><td style="text-align:right;font-weight:500">10</td><td>대기업</td><td>삼성그룹 건설·무역·패션, 연매출 40조+</td></tr>
+          <tr><td>삼정회계법인</td><td style="text-align:right;font-weight:500">30</td><td>대기업(글로벌 Big4)</td><td>KPMG 제휴 Big4 회계·컨설팅</td></tr>
+          <tr><td>우리금융지주</td><td style="text-align:right;font-weight:500">30+</td><td>대기업(5대 금융)</td><td>5대 금융그룹, 디지털 전환 투자 확대</td></tr>
+          <tr><td>LX인터내셔널</td><td style="text-align:right;font-weight:500">70</td><td>대기업 계열</td><td>LG계열 종합상사, 에너지·원자재·물류 글로벌</td></tr>
+          <tr><td>와이어바알리</td><td style="text-align:right;font-weight:500">70</td><td>스타트업(Series C)</td><td>70개국 글로벌 FX·국제송금 핀테크</td></tr>
+          <tr><td>뉴냅스</td><td style="text-align:right;font-weight:500">73</td><td>스타트업(Series B)</td><td>VR 기반 뇌졸중 재활, 디지털 치료제 국내 선두</td></tr>
+          <tr><td>캡스톤자산운용</td><td style="text-align:right;font-weight:500">9</td><td>중견</td><td>국내 중형 PE·자산운용</td></tr>
+          <tr><td>토스인슈어런스</td><td style="text-align:right;font-weight:500">18</td><td>스타트업(토스 계열)</td><td>토스 인슈어텍 자회사, 보험 디지털 전환</td></tr>
+          <tr><td>PwC컨설팅</td><td style="text-align:right;font-weight:500">8</td><td>대기업(글로벌 Big4)</td><td>PwC 한국 컨설팅, 글로벌 Big4</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: 구역 분석 -->
+  <div id="tab-구역" class="tab-content">
+    <div class="grid3" style="margin-bottom:16px">
+      <div class="stat-card"><div class="stat-label">GBD (강남/서초) 스타기업</div><div class="stat-val">26개</div></div>
+      <div class="stat-card"><div class="stat-label">CBD (도심) 스타기업</div><div class="stat-val">7개</div></div>
+      <div class="stat-card"><div class="stat-label">기타 권역 스타기업</div><div class="stat-val">11개</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">GBD — 강남/서초 권역 (스타기업 26개 · 전체 59%)</div>
+      <div class="card-sub">
+        IT·AI·SaaS가 압도적으로 밀집. 바이오·헬스, 핀테크가 뒤를 이음. 테헤란로 기반 VC·엑셀러레이터 생태계가 스타트업을 흡인. 삼성역·역삼·선릉 구간은 Series A~C 스케일업의 주된 거점. 토스·스캐터랩·뉴냅스 등 국내 인지도 최상위 기업 다수 포함.
+      </div>
+      <div class="card-tags">
+        <span class="badge badge-it">IT·AI 12개</span>
+        <span class="badge badge-fin">금융·핀테크 8개</span>
+        <span class="badge badge-bio">바이오·헬스 4개</span>
+        <span class="badge badge-con">컨설팅·HR 2개</span>
+        <span class="badge badge-d2c">D2C·물류 3개</span>
+        <span class="badge badge-mfg">제조·무역 1개</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">CBD — 도심 권역 (스타기업 7개 · 전체 16%)</div>
+      <div class="card-sub">
+        글로벌 MNC 한국 HQ와 대기업 계열사 집중. 팔란티어·바카디·클룩 등 외국계가 광화문·시청·을지로를 선호. 정부·공공기관 접근성 때문에 B2G 사업 비중 높은 기업이 선택하는 구역. 단가 극대화 및 프리미엄 수요 중심.
+      </div>
+      <div class="card-tags">
+        <span class="badge badge-it">IT·AI 1개</span>
+        <span class="badge badge-mfg">제조·무역 2개</span>
+        <span class="badge badge-con">컨설팅·HR 1개</span>
+        <span class="badge badge-fin">금융·핀테크 1개</span>
+        <span class="badge badge-ent">콘텐츠·엔터 1개</span>
+        <span class="badge badge-d2c">D2C 1개</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">기타 권역 (스타기업 11개 · 전체 25%)</div>
+      <div class="card-sub">
+        성수/서울숲(4개): AI·VFX·크리에이티브 테크 집중. 스캐터랩·덱스터크레마·현대오토에버 등 대형 앵커 다수. 마곡(1개): R&D 클러스터 LG전자. 홍대/합정(1개): 물류SaaS. 여의도(2개): 금융·D2C 크로스오버. 서울역(1개): IT서비스 대형 앵커. 용산(1개): 글로벌 엔터.
+      </div>
+      <div class="card-tags">
+        <span class="badge badge-etc">성수/서울숲 4개</span>
+        <span class="badge badge-etc">여의도/영등포 2개</span>
+        <span class="badge badge-etc">서울역 1개</span>
+        <span class="badge badge-etc">마곡 1개</span>
+        <span class="badge badge-etc">홍대/합정 1개</span>
+        <span class="badge badge-etc">용산 1개</span>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:1rem">업종 밀집도 요약</div>
+    <table>
+      <thead><tr><th>업종</th><th style="text-align:right">전체</th><th>GBD</th><th>CBD</th><th>기타</th><th>특징</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-it">IT·AI·SaaS</span></td><td style="text-align:right;font-weight:500">14</td><td>12</td><td>1</td><td>3</td><td>GBD 압도적 집중 ★</td></tr>
+        <tr><td><span class="badge badge-fin">금융·핀테크</span></td><td style="text-align:right;font-weight:500">8</td><td>7</td><td>1</td><td>0</td><td>GBD 집중, 대형 앵커 다수</td></tr>
+        <tr><td><span class="badge badge-mfg">제조·무역</span></td><td style="text-align:right;font-weight:500">5</td><td>1</td><td>2</td><td>2</td><td>CBD·기타 분산</td></tr>
+        <tr><td><span class="badge badge-con">컨설팅·HR</span></td><td style="text-align:right;font-weight:500">5</td><td>2</td><td>1</td><td>2</td><td>MNC 중심 분산</td></tr>
+        <tr><td><span class="badge badge-bio">바이오·헬스</span></td><td style="text-align:right;font-weight:500">4</td><td>4</td><td>0</td><td>0</td><td>GBD 완전 집중 ★</td></tr>
+        <tr><td><span class="badge badge-ent">콘텐츠·엔터</span></td><td style="text-align:right;font-weight:500">4</td><td>1</td><td>1</td><td>2</td><td>분산 (성수·용산)</td></tr>
+        <tr><td><span class="badge badge-d2c">D2C·물류</span></td><td style="text-align:right;font-weight:500">4</td><td>2</td><td>1</td><td>1</td><td>성수 D2C 클러스터</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TAB 4: 업종 그룹 -->
+  <div id="tab-그룹" class="tab-content">
+    <div class="card">
+      <div class="card-title"><span class="badge badge-it" style="margin-right:6px">IT·AI·SaaS</span> 14개 — 최대 집단</div>
+      <div class="card-sub">스캐터랩·팔란티어·워트인텔리전스·에스케이쉴더스·클라썸·클레온·셀렉트스타·매드업·팔로알토·원프레딕트·씨제이올리브네트웍스·현대오토에버·차봇·에어캡<br><br>
+      공통 방향성: AI 채용 붐으로 좌석 수요 빠르게 증가. 개발자·데이터 인재 확보가 최대 과제. 유연한 계약 구조와 확장성 선호. SaaS·플랫폼 기업은 ARR 성장과 함께 팀 규모 변동성이 큼 → 업세일 기회 최다.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge badge-fin" style="margin-right:6px">금융·핀테크</span> 8개 — 대형 앵커 집단</div>
+      <div class="card-sub">비바리퍼블리카·하나금융티아이·와이어바알리·우리금융지주·캡스톤자산운용·레버리지히어로·토스인슈어런스·에이아이에이프리미어파트너스<br><br>
+      공통 방향성: 보안·컴플라이언스 요건으로 프리미엄 오피스 선호. 장기계약(2~4년) 비중 높음. AI 뱅킹·핀테크 고도화로 개발팀 채용 지속. 고환율 시기 FX·송금 수요 급증 수혜.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge badge-mfg" style="margin-right:6px">제조·무역·에너지</span> 5개 — 대기업/MNC 중심</div>
+      <div class="card-sub">LG전자·LX인터내셔널·삼성물산·바카디코리아·칼스버그코리아<br><br>
+      공통 방향성: 본사/글로벌 HQ 수준 환경 요구. 브랜딩·직원 경험 중시. 고환율로 원화 기준 오피스 비용 최적화 니즈 발생. LG전자는 마곡 R&D 확장, 무역사는 파트너 미팅 빈도 높아 교통 접근성 중시.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge badge-con" style="margin-right:6px">컨설팅·HR·전문서비스</span> 5개</div>
+      <div class="card-sub">아데코코리아·BCG·PwC컨설팅·삼정회계법인·에이아이에이프리미어파트너스(일부)<br><br>
+      공통 방향성: 클라이언트 미팅 공간·접근성 최우선. 글로벌 본사 기준 환경 요구. 인원 유동성(프로젝트 단위) 있어 유연좌석 선호. 레퍼런스 세일즈에 활용 가치 높음.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge badge-bio" style="margin-right:6px">바이오·헬스케어</span> 4개 — GBD 완전 집중</div>
+      <div class="card-sub">뉴냅스·아이톡시·에스디생명공학·필라이즈<br><br>
+      공통 방향성: 강남 VC·병원 네트워크 접근성 중시. 임상·연구팀과 사업팀 분리 니즈. Series B 전후 빠른 채용. DTx·피부바이오·헬스케어SaaS 등 고성장 세부 업종 다수.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge badge-ent" style="margin-right:6px">콘텐츠·엔터테인먼트</span> 4개</div>
+      <div class="card-sub">덱스터크레마·봉봉·인플루디오·소니뮤직코리아·클룩(일부)<br><br>
+      공통 방향성: K-콘텐츠 글로벌 수요로 팀 빠른 확장 중. 크리에이티브 환경·공간 분위기 선호도 높음. 협업 공간·이벤트룸 니즈. 계절성 없는 안정적 성장.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge badge-d2c" style="margin-right:6px">D2C·이커머스·물류</span> 4개</div>
+      <div class="card-sub">파스토·글리티·에이유브랜즈·에어캡·차봇(일부)<br><br>
+      공통 방향성: 고환율로 수입원가 상승 → 고정비 최소화 니즈. 이커머스 성장으로 풀필먼트·물류SaaS 수요 폭증. 브랜드 성수 클러스터 형성 중. 빠른 팀 성장과 공간 유연성 요구.</div>
+    </div>
+  </div>
+
+  <!-- TAB 5: 아이스브레이킹 -->
+  <div id="tab-훅" class="tab-content">
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-it">IT·AI·SaaS</span>
+        <span class="hook-company">스캐터랩 · 팔란티어 · 워트인텔리전스 · 클라썸 · 셀렉트스타 · 클레온</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>AI 생산성 패러독스 — "AI 투자는 늘어나는데 실제 체감 효율은 의외로 더디다는 얘기 많죠. 저희 입주사들도 집중 업무 환경 자체가 AI 격차를 좁히는 열쇠라고 하던데, 지금 팀 공간에서 가장 불편한 점이 뭔가요?"</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>AI 채용 경쟁 — "요즘 AI 개발자 몸값이 워낙 올라서, 우수 인재 리텐션에 오피스 환경이 꽤 영향 준다는 분들 많더라고요. 현재 팀 규모 대비 좌석 여유가 어떻게 되세요?"</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>SaaS ARR 성장 — "보통 ARR이 일정 구간 넘어서면 팀 규모가 분기마다 달라지잖아요. 지금 계약 구조가 그 유연성을 받쳐주고 있는지 여쭤봐도 될까요?"</span></div>
+    </div>
+
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-fin">금융·핀테크</span>
+        <span class="hook-company">토스 · 하나금융티아이 · 와이어바알리 · 우리금융 · 레버리지히어로</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>고환율 1,470원대 — "달러 비용 나가는 기업은 원화 고정비를 최대한 유연하게 가져가는 게 환 리스크 헤지 방법 중 하나라고들 하더라고요. 재무팀에서 오피스 비용 구조를 어떻게 보고 계세요?"</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>AI 뱅킹 개발 인력 급증 — "핀테크 쪽은 AI 뱅킹 고도화로 개발팀 채용이 빠르다고 느끼는데, 현재 좌석 플랜이 그 속도를 커버하고 있나요?"</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>금융 보안 컴플라이언스 — "금융사는 물리 보안이나 망분리 요건 때문에 공간 선택지가 제한적이잖아요. 지금 오피스에서 그 부분은 어떻게 해결하고 계세요?"</span></div>
+    </div>
+
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-mfg">제조·무역·에너지</span>
+        <span class="hook-company">LG전자 · LX인터내셔널 · 바카디 · 칼스버그 · 삼성물산</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>UAE 원유 우선 공급 이슈 — "UAE가 한국에 원유 우선 공급하기로 한 배경에 한국의 정제 능력이 있다는 얘기 들으셨죠? 에너지·무역 쪽은 이런 지정학 이슈가 사업에 직접 연결되다 보니 팀 이동도 잦으실 것 같아요."</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>고환율 수출 오피스 업그레이드 타이밍 — "수출 비중 높은 기업은 지금 고환율이 오히려 원화 기준 오피스 업그레이드 적기라는 시각도 있더라고요. 재무 관점에서 어떻게 보고 계세요?"</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>R&D 프로젝트 오피스 수요 — "마곡·판교 R&D 클러스터 기업들은 프로젝트 단위로 별도 공간이 필요할 때가 많죠. 지금 그런 니즈가 있으신가요?"</span></div>
+    </div>
+
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-con">컨설팅·HR·전문서비스</span>
+        <span class="hook-company">아데코 · BCG · PwC · 삼정회계법인</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>하이브리드 근무 정착 — "컨설팅·HR 쪽은 하이브리드 정착 이후 주 2~3일 출근 기준으로 좌석 수를 재설계하는 곳들이 많더라고요. 지금 실제 출근율 기준으로 공간 최적화를 고민 중이신가요?"</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>클라이언트 미팅 인프라 — "파트너·시니어 직급일수록 클라이언트 미팅룸 접근성을 꽤 중요하게 보시더라고요. 현재 외부 미팅이 주로 어디서 이뤄지고 있으세요?"</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>글로벌 본사 기준 환경 요구 — "글로벌 HQ에서 오피스 기준을 내려보내는 경우가 많죠. 현재 한국 법인 환경이 그 기준을 맞추고 있는지 여쭤봐도 될까요?"</span></div>
+    </div>
+
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-bio">바이오·헬스케어</span>
+        <span class="hook-company">뉴냅스 · 아이톡시 · 에스디생명공학 · 필라이즈</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>디지털 치료제·DTx 규제 환경 변화 — "DTx 쪽이 식약처 허가 프로세스가 조금씩 정비되고 있잖아요. 인허가 통과 이후 팀 빠르게 늘리는 경우가 많더라고요. 지금 그 단계에 가까워지고 있으신가요?"</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>K-뷰티 바이오 원료 글로벌 수요 — "K-뷰티가 글로벌에서 주목받으면서 원료·소재 기업 수요도 같이 올라가는 구간이잖아요. 해외 파트너 미팅이 늘고 있으신가요?"</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>시리즈 투자 이후 채용 확장 — "바이오 스타트업은 시리즈 라운드 직후 6~12개월 안에 팀이 확 늘어나는 경우가 많죠. 지금 어느 단계에 계신지, 공간 플래닝은 어떻게 하고 계세요?"</span></div>
+    </div>
+
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-ent">콘텐츠·엔터</span>
+        <span class="hook-company">덱스터크레마 · 봉봉 · 인플루디오 · 소니뮤직코리아 · 클룩</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>K-콘텐츠 글로벌 수요 — "오징어게임·K-팝 이후로 글로벌 OTT·레이블에서 한국 콘텐츠 수요가 지속되고 있잖아요. 그게 팀 채용 속도에 직접 영향을 주고 있으신가요?"</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>중동 분쟁 여파 → 아시아 여행 재편 (OTA) — "장거리 여행 수요가 아시아 내로 재편되는 게 클룩 입장에선 오히려 기회 아닌가요? 올해 한국팀 채용 계획도 상향됐는지 궁금합니다."</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>크리에이터 이코노미 성장 — "인플루언서 마케팅 시장이 TV 광고 규모를 넘어서고 있다는 얘기가 나오죠. 플랫폼 쪽 팀은 어떤 속도로 성장하고 있으신가요?"</span></div>
+    </div>
+
+    <div class="hook-card">
+      <div class="hook-header">
+        <span class="hook-badge badge-d2c">D2C·이커머스·물류</span>
+        <span class="hook-company">파스토 · 글리티 · 에이유브랜즈 · 발렌라이프 · 에어캡</span>
+      </div>
+      <div class="hook-item"><span class="hook-num">1</span><span>고환율 + 수입 원가 상승 — "고환율에 원재료·물류비까지 오르면서 D2C 마진 압박이 크죠. 그럴수록 가장 유연하게 조정 가능한 오피스 비용에 집중하는 기업들이 많아졌어요."</span></div>
+      <div class="hook-item"><span class="hook-num">2</span><span>이커머스 성수기 팀 변동 — "이커머스 쪽은 성수기마다 단기 인원이 들어오는 경우가 많죠. 그때마다 공간 유연성이 필요하실 것 같은데 지금 어떻게 해결하고 계세요?"</span></div>
+      <div class="hook-item"><span class="hook-num">3</span><span>해운 운임 변동 + 풀필먼트 SaaS 수요 — "해운 운임이 또 출렁이면서 국내 풀필먼트 SaaS 도입 문의가 더 빨라지는 구조죠. 현재 고객사 증가 속도가 팀 규모에 어떻게 반영되고 있나요?"</span></div>
+    </div>
+  </div>
+
+  <!-- TAB 6: 인사이트 -->
+  <div id="tab-인사이트" class="tab-content">
+    <div class="section">
+      <div class="section-title">공략 우선순위</div>
+      <div class="grid2" style="margin-bottom:14px">
+        <div class="stat-card"><div class="stat-label">1순위 — IT·AI·SaaS</div><div class="stat-val" style="font-size:15px">14개사 · 업세일 최다</div></div>
+        <div class="stat-card"><div class="stat-label">2순위 — 금융·핀테크</div><div class="stat-val" style="font-size:15px">8개사 · 장기·고단가</div></div>
+        <div class="stat-card"><div class="stat-label">3순위 — 글로벌 MNC</div><div class="stat-val" style="font-size:15px">10개+ · 프리미엄 단가</div></div>
+        <div class="stat-card"><div class="stat-label">4순위 — 바이오·헬스</div><div class="stat-val" style="font-size:15px">4개사 · 투자 후 급성장</div></div>
+      </div>
+
+      <div class="section-title">영업·고객 대응 포인트</div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>GBD 집중 공략:</strong> 스타기업 59%가 강남/서초 권역. 삼성·역삼·선릉·신논현·학동 지점 담당자는 IT·핀테크·바이오 레퍼런스 카드를 항상 지참. "토스·스캐터랩·뉴냅스가 이미 선택한 공간" 메시지 효과적.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>확장 유력 기업 선제 컨택:</strong> AI 채용 붐 기업(스캐터랩 171인, 팔란티어 133인, 워트인텔리전스 148인)은 연 20~30% 인원 증가 예상. 계약 갱신 3개월 전 선제 업세일 미팅 필수.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>MNC 고환율 논리 활용:</strong> 바카디·아데코·클룩·팔란티어 등 외국계 기업엔 "원화 기준 오피스 비용 최적화"를 앞세울 것. 본사 보고 시 달러 환산 절감 효과를 수치로 제시하면 의사결정 빠름.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>핀테크 장기계약 전략:</strong> 토스·하나금융티아이·우리금융지주는 2~4년 장기계약 성향. 초기 협상에서 좌석 유연 증감 옵션을 패키지화하면 ARR 안정성 확보 가능.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>바이오 투자 이벤트 모니터링:</strong> 뉴냅스·아이톡시·필라이즈 등 시리즈B 전후 기업은 투자 라운드 클로징 직후 3~6개월 내 공간 확장 수요 발생. 투자 공시 후 즉시 컨택.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>성수 크리에이티브 클러스터 포지셔닝:</strong> 서울숲1호점에 스캐터랩(171인)·덱스터크레마(145인)·현대오토에버(116인) 밀집. "AI×콘텐츠 클러스터" 브랜딩으로 동종 업계 신규 기업 유입 가속화 가능.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>레퍼런스 세일즈 카드 구성 제안:</strong> 업종별(IT/금융/바이오/MNC)로 입주 스타기업 2~3개를 묶은 레퍼런스 카드 제작. "귀사와 같은 업계 XX기업도 이용 중"이 스타트업 커뮤니티에서 의사결정 속도를 2배 이상 높임.</span></div>
+
+      <div class="insight-row"><div class="insight-dot"></div><span><strong>아이스브레이킹 ≠ 영업 시작:</strong> 위 훅은 대화 진입용. 고객이 공감하면 곧바로 "현재 공간에서 가장 불편한 점이 뭔가요?"로 전환해 니즈를 구체화할 것.</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const btn = [...document.querySelectorAll('.tab')].find(t => t.textContent.includes(name.slice(0,2)));
+  if (btn) btn.classList.add('active');
+  const panel = document.getElementById('tab-' + name);
+  if (panel) panel.classList.add('active');
+}
+</script>
